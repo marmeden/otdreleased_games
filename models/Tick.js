@@ -197,9 +197,16 @@ module.exports = class Tick {
         let cover = await Promise.all(
             this.releases.map(async rel => {
                 if (!rel.cover_full) {
-                    let cover = await this.fetchCover(rel.id);
-                    rel.cover_full = cover[0].url.replace("t_thumb", "t_cover_big");
-                    updatable = true;
+                    try {
+                        let cover = await this.fetchCover(rel.id);
+                        rel.cover_full = cover[0].url.replace("t_thumb", "t_cover_big");
+                        updatable = true;
+                    }
+
+                    catch(err) {
+                        console.log(err.message);
+                    }
+
                 }
                 return rel
             })
@@ -210,9 +217,16 @@ module.exports = class Tick {
         let company = await Promise.all(
             this.releases.map(async rel => {
                 if (!rel.company_full) {
-                    let company = await this.fetchCompany(rel.company);
-                    rel.companies_full = company;
-                    updatable = true;
+                    try {
+                        let company = await this.fetchCompany(rel.company);
+                        rel.companies_full = company;
+                        updatable = true;
+                    }
+
+                    catch(err) {
+                        console.log(err.message);
+                    }
+
                 }
                 return rel
             })
@@ -222,9 +236,16 @@ module.exports = class Tick {
         let platform = await Promise.all(
             this.releases.map(async rel => {
                 if (!rel.platforms_full) {
-                    let platform = await this.fetchPlatform(rel.platforms);
-                    rel.platforms_full = platform;
-                    updatable = true;
+                    try {
+                        let platform = await this.fetchPlatform(rel.platforms);
+                        rel.platforms_full = platform;
+                        updatable = true;
+                    } 
+                    catch(err) {
+                        rel.platforms_full = [];
+                        console.log(err.message);
+                    }
+
                 }
                 return rel
             })
