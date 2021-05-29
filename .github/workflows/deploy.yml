@@ -1,0 +1,17 @@
+name: DeployCI
+
+on: [push]
+
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: [ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v1
+      - name: Push to server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          password: ${{ secrets.PW }}
+          script: cd ${{ secrets.PATH }} && git pull && npm install
